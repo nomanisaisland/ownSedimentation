@@ -615,6 +615,9 @@ git config --global --unset https.proxy
 
    + Windows用户：cmd命令窗口执行：
     ipconfig /flushdns
+    
+    
+# 以上办法都不行的话,进入C:\Windows\System32\drivers\etc把host里面关于GitHub的删掉就可以了
 ```
 
 ```shell
