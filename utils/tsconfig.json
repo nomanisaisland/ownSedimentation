@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "composite": false,
+    "useDefineForClassFields": false,
+    "target": "ES5",
+    "downlevelIteration": true,
+    "importHelpers": false,
+    "lib": [
+      "esnext",
+      "DOM"
+    ],
+    "module":"ESNext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "incremental": false,
+    "assumeChangesOnlyAffectDirectDependencies": true,
+    "noEmitOnError": false,
+    "forceConsistentCasingInFileNames": true,
+    "preserveSymlinks": false,
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "declaration": false,
+    "strict": false,
+    "removeComments": true
+  },
+  "include": [
+    "./**/*",
+  ],
+  "exclude": [
+    "./node_modules/**/*",
+    "./build/**/*"
+  ],
+  "compileOnSave": true
+}
