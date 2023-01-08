@@ -5,11 +5,11 @@
 ## 引入外部svg形式
 1. 外部引用
  ```html
-  <img src="xxx.svg" alt="">
-  <div style="background: url(xxx.svg)">
+<img src="xxx.svg" alt="">
+<div style="background: url(xxx.svg)">
 
-  </div>
-  <iframe src="xxx.svg" width="" height=""></iframe>
+</div>
+<iframe src="xxx.svg" width="" height=""></iframe>
  ```
 2. 根据html5的特性直接写
  ```html

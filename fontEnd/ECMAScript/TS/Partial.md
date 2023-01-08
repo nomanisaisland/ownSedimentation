@@ -21,7 +21,6 @@ TS 内置的 [实用类型](https://link.juejin.cn?target=https%3A%2F%2Fwww.type
 type Partial<T> = {
   [P in keyof T]?: T[P]
 }
-复制代码
 ```
 
 - 源码解析
@@ -37,7 +36,6 @@ interface Dogs {
   dogKind: string
 }
 type DogsKey = keyof Dogs // 等同于 type DogsKey = "dogName" | "dogAge" | "dogKind"
-复制代码
 ```
 
 `in` 关键字是理解这段源码的关键，TS 的官方文档中，给出了[定义](https://link.juejin.cn?target=typescriptlang.org%2Fdocs%2Fhandbook%2Frelease-notes%2Ftypescript-4-1.html%23key-remapping-in-mapped-types)：`key remapping in mapped types`，也就是[映射类型](https://link.juejin.cn?target=https%3A%2F%2Fwww.typescriptlang.org%2Fdocs%2Fhandbook%2F2%2Fmapped-types.html)
@@ -47,7 +45,6 @@ type DogsKey = keyof Dogs // 等同于 type DogsKey = "dogName" | "dogAge" | "do
 ```ts
 // OldType 为一个联合类型
 type NewType = { [K in OldType]: NewResultType }
-复制代码
 ```
 
 ![key-mapping-type-example.jpg](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/854ff33d222548be825e2e9cd657e54c~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp)
@@ -73,7 +70,6 @@ type NewType = {
   key1: NewResultType
   key2: NewResultType
 }
-复制代码
 ```
 
 你可以在 TS 官网中看到类似的例子。
@@ -84,7 +80,6 @@ type NewType = {
 type IndexType = {
     [key: string]?: string // 错误的写法
 }
-复制代码
 ```
 
 但在映射类型中，`?` 的写法是可以的
@@ -93,7 +88,6 @@ type IndexType = {
 type MappingType = {
   [key in OldType]?: NewResultType // 正确的写法
 }
-复制代码
 ```
 
 上面的代码会得到一个这样的类型
@@ -103,7 +97,6 @@ type NewType = {
   key1?: NewResultType | undefined
   key2?: NewResultType | undefined
 }
-复制代码
 ```
 
 对于属性的结果类型，源码中是这样处理的：`T[P]`，也就是[索引访问](https://link.juejin.cn?target=https%3A%2F%2Fwww.typescriptlang.org%2Fdocs%2Fhandbook%2F2%2Findexed-access-types.html)
@@ -118,7 +111,6 @@ interface Dogs {
 }
 
 type DogName = Dogs["dogName"] // 得到 string 类型
-复制代码
 ```
 
 如果字符串 `"dogName"` 代表一个[字面量类型](https://link.juejin.cn?target=https%3A%2F%2Fwww.typescriptlang.org%2Fdocs%2Fhandbook%2F2%2Feveryday-types.html%23literal-types)，那么下面的这种写法就与 `T[P]` 是相似的
@@ -126,7 +118,6 @@ type DogName = Dogs["dogName"] // 得到 string 类型
 ```ts
 type DogNameKey = "dogName"
 type DogName = Dogs[DogNameKey]
-复制代码
 ```
 
 对于源码的 `[P in keyof T]` 部分中的 `P`，在 `in` 操作符的作用下会是联合类型中的某一个具体的字面量类型
@@ -155,7 +146,6 @@ const [state, setState] = useReducer(
 )
 // 使用
 setState({ page: 1 })
-复制代码
 ```
 
 上面的代码中 nextState 被传入后，会与原 state 做合并操作，nextState 并不需要含有 State 类型的所有键，故使用 Partial 进行类型的定义
@@ -176,7 +166,6 @@ function testFunction(params: Partial<Params>) {
   }
   return requiredParams
 }
-复制代码
 ```
 
 ### Required
@@ -192,7 +181,6 @@ function testFunction(params: Partial<Params>) {
 type Required<T> = {
   [P in keyof T]-?: T[P]
 }
-复制代码
 ```
 
 - 源码解析
@@ -205,7 +193,6 @@ TS 在 2.8 版本改进了对[映射类型修饰符的控制](https://link.jueji
 type Partial<T> = {
   [P in keyof T]+?: T[P]
 }
-复制代码
 ```
 
 也就是说 `-?` 的写法会去除可选属性这一属性修饰符，达到让每个属性都变为必选的目的
@@ -219,7 +206,6 @@ interface TestNullCheck {
 }
 
 type Test = Required<TestNullCheck> // 得到 { testParam: number }
-复制代码
 ```
 
 - 使用场景举例
@@ -239,7 +225,6 @@ type Test = Required<TestNullCheck> // 得到 { testParam: number }
 type Readonly<T> = {
   readonly [P in keyof T]: T[P]
 }
-复制代码
 ```
 
 - 源码解析
@@ -267,7 +252,6 @@ type Readonly<T> = {
 type Pick<T, K extends keyof T> = {
   [P in K]: T[P]
 }
-复制代码
 ```
 
 - 源码解析
@@ -287,7 +271,6 @@ type NameAndAge = Pick<Dogs, "dogName" | "dogAge"> // { dogName: string; dogAge:
 
 // 单个字符串类型
 type DogKind = Pick<Dogs, "dogKind"> // { dogKind: string; }
-复制代码
 ```
 
 在 `Pick` 的实现中，引入了新的语法，[泛型](https://link.juejin.cn?target=https%3A%2F%2Fwww.typescriptlang.org%2Fdocs%2Fhandbook%2F2%2Fgenerics.html)、[extends](https://link.juejin.cn?target=https%3A%2F%2Fwww.typescriptlang.org%2Fdocs%2Fhandbook%2F2%2Fgenerics.html%23generic-constraints)
@@ -319,7 +302,6 @@ type DogKind = Pick<Dogs, "dogKind"> // { dogKind: string; }
 type Record<K extends keyof any, T> = {
   [P in K]: T
 }
-复制代码
 ```
 
 - 源码解析
@@ -344,7 +326,6 @@ type StringDogs = {
   dogAge: string
   dogKind: string
 }
-复制代码
 ```
 
 但你可能对于 `keyof any` 不太理解
@@ -353,7 +334,6 @@ type StringDogs = {
 type KeyofAny = keyof any
 // 等同于
 type KeyofAny = string | number | symbol
-复制代码
 ```
 
 被上述代码中 `KeyofAny` 约束的类型可以是如下类型
@@ -369,7 +349,6 @@ type G = string
 type H = number
 type I = symbol
 type J = symbol | 1
-复制代码
 ```
 
 也就是 由 `symbol` 、`number` 或 `string` 排列组合形成的联合类型、或字面量类型、或字面量类型组成的联合类型
@@ -403,7 +382,6 @@ function getRestAgeByCurrentAgeAndKinds(
   return dogsRestAge[kind](currentAge)
 }
 getRestAgeByCurrentAgeAndKinds("dogKind1", 1)
-复制代码
 ```
 
 ### Exclude
@@ -417,7 +395,6 @@ getRestAgeByCurrentAgeAndKinds("dogKind1", 1)
  * Exclude from T those types that are assignable to U
  */
 type Exclude<T, U> = T extends U ? never : T
-复制代码
 ```
 
 - 源码解析
@@ -434,7 +411,6 @@ interface Dogs {
 type KeyofDogs = keyof Dogs // "dogName" | "dogAge" | "dogKind"
 
 type KeysWithoutKind = Exclude<KeyofDogs, "dogKind"> // "dogName" | "dogAge"
-复制代码
 ```
 
 在 `Exclude` 的源码中，引入了新的语法，[条件类型 Conditional Types](https://link.juejin.cn?target=https%3A%2F%2Fwww.typescriptlang.org%2Fdocs%2Fhandbook%2F2%2Fconditional-types.html)
@@ -457,7 +433,6 @@ type KeysWithoutKind = Exclude<KeyofDogs, "dogKind"> // "dogName" | "dogAge"
 type ExampleA = Exclude<1, 2> // 会走正常的条件类型，1 不能分配给 2，会得到第一个泛型参数的类型，也就是字面量类型 1
 
 type ExampleB = Exclude<{ 2: string }, 2> // 原理同上方注释，也是传入的第一个泛型参数的类型 { 2: string }
-复制代码
 ```
 
 - 使用场景举例
@@ -475,7 +450,6 @@ type ExampleB = Exclude<{ 2: string }, 2> // 原理同上方注释，也是传�
  * Extract from T those types that are assignable to U
  */
 type Extract<T, U> = T extends U ? T : never
-复制代码
 ```
 
 - 源码解析
@@ -492,7 +466,6 @@ interface Dogs {
 type KeyofDogs = keyof Dogs // "dogName" | "dogAge" | "dogKind"
 
 type KeysOnlyKind = Extract<KeyofDogs, "dogKind"> // "dogKind"
-复制代码
 ```
 
 - 使用场景举例
@@ -520,7 +493,6 @@ type Include<T, K extends keyof any> = Pick<T, Extract<keyof T, K>>
  * Construct a type with the properties of T except for those in type K.
  */
 type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>
-复制代码
 ```
 
 `Omit` 源码借助了 `Pick` 和 `Exclude`，`Pick` 会构造一个基于第一个参数，且属性为第二个参数（联合类型）的联合类型成员的类型
@@ -541,7 +513,6 @@ interface Dogs {
 }
 
 type DogsWithoutKind = Omit<Dogs, "dogKind"> // { dogName: string; dogAge: number; }
-复制代码
 ```
 
 - 使用场景举例
@@ -571,7 +542,6 @@ const Input: React.FC<InputProps> = (props) => {
 Input.defaultProps = {
   size: "middle",
 }
-复制代码
 ```
 
 1. 对第三方 UI 组件二次封装时，替换其参数
@@ -626,7 +596,6 @@ const myBrothersDog = {
 
 // 校验失败
 goToWash(myBrothersDog) // '凭证和狗狗不对应'
-复制代码
 ```
 
 ### NonNullable
@@ -640,7 +609,6 @@ goToWash(myBrothersDog) // '凭证和狗狗不对应'
  * Exclude null and undefined from T
  */
 type NonNullable<T> = T extends null | undefined ? never : T
-复制代码
 ```
 
 - 源码解析
@@ -655,7 +623,6 @@ type DogsName = 'husky' | 'corgi' | null | undefined
 
 // 到商店洗狗时，不允许没有名字的狗
 type NonNullableDogsName = NonNullable<DogsName> // 得到 type NonNullableDogsName = "husky" | "corgi"
-复制代码
 ```
 
 另外，当传入的参数不为联合类型时，除 `null` 和 `undefined`，都会得到传入类型本身
@@ -669,7 +636,6 @@ type NonNullableUnknown = NonNullable<unknown> // unknown
 type NonNullableNever = NonNullable<never> // never
 // null
 type NonNullableNull = NonNullable<null> // never
-复制代码
 ```
 
 - 使用场景举例
@@ -704,7 +670,6 @@ type ParamsByCallbackMap = {
   *   };
   *}
   */
-复制代码
 ```
 
 ### Parameters
@@ -718,7 +683,6 @@ type ParamsByCallbackMap = {
  * Obtain the parameters of a function type in a tuple
  */
 type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never;
-复制代码
 ```
 
 - 源码解析
@@ -736,7 +700,6 @@ const arrowFunc: Func3 = (
   arg2: number, 
   ...args: Array<number>
 ) => arg1 + [arg2, ...args].reduce((preTotal, current) => preTotal + current, 0)
-复制代码
 ```
 
 1. 使用接口进行定义（下面代码中的 `Func3` 语法为 [调用签名 call-signatures](https://link.juejin.cn?target=https%3A%2F%2Fwww.typescriptlang.org%2Fdocs%2Fhandbook%2F2%2Ffunctions.html%23call-signatures)）
@@ -760,7 +723,6 @@ interface Func3 {
 const func3: Func3 = (arg: number) => {
   return arg.toString()
 }
-复制代码
 ```
 
 1. 使用接口进行重载（实际上是接口的合并）
@@ -773,7 +735,6 @@ interface Func {
 const func: Func = (arg: number | string) => {
   return arg.toString()
 }
-复制代码
 ```
 
 1. 使用 declare 进行类型定义（[contextual-typing](https://link.juejin.cn?target=https%3A%2F%2Fwww.typescriptlang.org%2Fdocs%2Fhandbook%2Ftypescript-in-5-minutes-func.html%23contextual-typing)）
@@ -783,7 +744,6 @@ declare function Func(...args: string[]): string
 const func: typeof Func = (...args: string[]) => {
   return args.join('')
 }
-复制代码
 ```
 
 1. 使用函数声明进行重载（[函数重载 function-overloads](https://link.juejin.cn?target=https%3A%2F%2Fwww.typescriptlang.org%2Fdocs%2Fhandbook%2F2%2Ffunctions.html%23function-overloads)）
@@ -794,7 +754,6 @@ function func4(...args: number[]): string
 function func4(...args: (string | number)[]) {
   return args.join('')
 }
-复制代码
 ```
 
 > 摘自文档：从具有多个调用签名的类型（例如重载函数的类型）进行推断时，将从最后一个签名进行推断。无法基于参数类型列表执行重载解析
@@ -812,7 +771,6 @@ function func4(...args: (string | number)[]) {
 ```ts
 type Example1 = Array<number> extends Array<infer T> ? T : never // number
 type Example2 = { a: string } extends { a: infer T } ? T : never // string
-复制代码
 ```
 
 看到上面两个例子，可能 Parameters 源码你已经能看懂了
@@ -827,7 +785,6 @@ type Example2 = { a: string } extends { a: infer T } ? T : never // string
 type Example1 = { a: string } extends { a: string } ? true : false // true
 type Example2 = { a: string; b: number } extends { a: string } ? true : false // true
 type Example3 = { a: string; } extends { a: string; b: number } ? true : false // false
-复制代码
 ```
 
 如果左侧类型是一个联合类型，在下面的例子中，只有 Example2 中，左侧是不可分配给右侧的，因为 `'b'` 不能分配给 `'a'`
@@ -838,7 +795,6 @@ type Example3 = { a: string; } extends { a: string; b: number } ? true : false /
 type Example1 = 'a' extends 'a' ? true : false // true
 type Example2 = 'a' | 'b' extends 'a' ? true : false // false
 type Example3 = 'a' extends 'a' | 'b' ? true : false // true
-复制代码
 ```
 
 那么，某个函数类型的子类型是什么样的呢？
@@ -869,7 +825,6 @@ function customerSayDogInfo(receiveAction: (params: { dogAge: number; dosKind: s
 }
 // ts 类型校验通过，staffGetDogInfo 可以分配给 customerSayDogInfo 的参数类型 receiveAction
 customerSayDogInfo(staffGetDogInfo)
-复制代码
 ```
 
 示例中仅展示单一参数的情况，对于参数个数，这个规则也是类似的，你可以多给我几个参数，但我可以不用
@@ -920,7 +875,6 @@ function customerSayDogInfo(
 }
 // ts 类型校验通过，staffGetDogInfo 可以分配给 customerSayDogInfo 的参数类型 receiveAction
 customerSayDogInfo(staffGetDogInfo)
-复制代码
 ```
 
 结合上面两个例子，容易得到：**两个函数类型做比较，函数参数少（或参数数量相等）的且对应位置参数需要的属性/方法少的（不超过另一个类型对应位置参数需要的属性/方法数量，但注意联合类型和对象类型是反着的，联合类型的成员要比对应位置参数类型的联合类型成员多），且函数返回值类型中含有的属性或方法要多于另一个函数类型的时候（注意联合类型是成员更少的），该类型是函数子类型**
@@ -941,7 +895,6 @@ customerSayDogInfo(staffGetDogInfo)
  * Obtain the parameters of a constructor function type in a tuple
  */
 type ConstructorParameters<T extends new (...args: any) => any> = T extends new (...args: infer P) => any ? P : never;
-复制代码
 ```
 
 - 源码解析
@@ -972,7 +925,6 @@ class Dog {
   }
 }
 type DogGaveBirthNeedInfo = ConstructorParameters<typeof Dog> // 得到 [boolean, string] 类型
-复制代码
 ```
 
 ### ReturnType
@@ -986,7 +938,6 @@ type DogGaveBirthNeedInfo = ConstructorParameters<typeof Dog> // 得到 [boolean
  * Obtain the return type of a function type
  */
 type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
-复制代码
 ```
 
 - 源码解析
@@ -1010,7 +961,6 @@ type WashTicket = ReturnType<typeof washDog>
  *  dogKind: string
  *}
 */ 
-复制代码
 ```
 
 - 使用场景举例
@@ -1027,7 +977,6 @@ type WashTicket = ReturnType<typeof washDog>
  * Obtain the return type of a constructor function type
  */
 type InstanceType<T extends new (...args: any) => any> = T extends new (...args: any) => infer R ? R : any;
-复制代码
 ```
 
 - 源码解析
@@ -1046,7 +995,6 @@ class Dog {
   }
 }
 type DogGaveBirthNeedInfo = InstanceType<typeof Dog> // 得到 Dog 类型
-复制代码
 ```
 
 也许你会疑问，为什么还得到 Dog 本身了？
@@ -1072,7 +1020,6 @@ type DogGaveBirthNeedInfo = InstanceType<typeof Dog> // 得到 Dog 类型
  * Convert string literal type to uppercase
  */
 type Uppercase<S extends string> = intrinsic;
-复制代码
 ```
 
 - 用法

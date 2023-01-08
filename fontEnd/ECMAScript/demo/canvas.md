@@ -39,38 +39,38 @@ ctx.setLineDash( 数组 )
 ctx.getLineDash()
 ctx.lineDashOffset = 值
 --------------------------------
-   ctx.moveTo( 100, 90 );
-    ctx.lineTo( 100, 110 );
-    ctx.moveTo( 300, 90 );
-    ctx.lineTo( 300, 110 );
+ctx.moveTo( 100, 90 );
+ctx.lineTo( 100, 110 );
+ctx.moveTo( 300, 90 );
+ctx.lineTo( 300, 110 );
 
-    ctx.moveTo( 100, 140 );
-    ctx.lineTo( 100, 160 );
-    ctx.moveTo( 300, 140 );
-    ctx.lineTo( 300, 160 );
+ctx.moveTo( 100, 140 );
+ctx.lineTo( 100, 160 );
+ctx.moveTo( 300, 140 );
+ctx.lineTo( 300, 160 );
 
-    ctx.moveTo( 100, 190 );
-    ctx.lineTo( 100, 210 );
-    ctx.moveTo( 300, 190 );
-    ctx.lineTo( 300, 210 );
-    ctx.stroke();
+ctx.moveTo( 100, 190 );
+ctx.lineTo( 100, 210 );
+ctx.moveTo( 300, 190 );
+ctx.lineTo( 300, 210 );
+ctx.stroke();
 
-    ctx.beginPath();
-    ctx.moveTo( 100, 100 );
-    ctx.lineTo( 300, 100 );
-    ctx.stroke();
+ctx.beginPath();
+ctx.moveTo( 100, 100 );
+ctx.lineTo( 300, 100 );
+ctx.stroke();
 
-    ctx.beginPath();
-    ctx.setLineDash( [ 5, 5 ] );
-    ctx.moveTo( 100, 150 );
-    ctx.lineTo( 300, 150 );
-    ctx.stroke();
+ctx.beginPath();
+ctx.setLineDash( [ 5, 5 ] );
+ctx.moveTo( 100, 150 );
+ctx.lineTo( 300, 150 );
+ctx.stroke();
 
-    ctx.beginPath();
-    ctx.lineDashOffset = -2;
-    ctx.moveTo( 100, 200 );
-    ctx.lineTo( 300, 200 );
-    ctx.stroke();
+ctx.beginPath();
+ctx.lineDashOffset = -2;
+ctx.moveTo( 100, 200 );
+ctx.lineTo( 300, 200 );
+ctx.stroke();
 
 
 ```
